@@ -1,0 +1,22 @@
+volumes:
+  rabbitmq:
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: "app_rabbitmq"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE} # GARANTE o serviço rodando, entre outras coisas
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_DEFAULT_VHOST}
+    ports:
+      - ${RABBITMQ_PORT_WEB}:15672 # Browser Web
+      - ${RABBITMQ_PORT_INTERNAL}:5672 # Connect applications inside
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
+networks:
+  app-bridge:
+    driver: bridge
